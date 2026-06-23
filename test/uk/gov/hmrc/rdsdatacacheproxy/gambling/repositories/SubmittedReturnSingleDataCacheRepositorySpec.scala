@@ -68,57 +68,38 @@ class SubmittedReturnSingleDataCacheRepositorySpec extends AnyWordSpec with Matc
 
       val regNumber = "XWM12345678901"
 
-      when(mockCsMgd.getObject(3)).thenReturn(SubmittedReturnSingleRs)
-
-      when(SubmittedReturnSingleRs.next()).thenReturn(true, false)
-
-      when(SubmittedReturnSingleRs.getInt("consec_no")).thenReturn(23)
-      when(SubmittedReturnSingleRs.getString("mgd_period")).thenReturn("01/01/2025 - 30/03/2025")
-      when(SubmittedReturnSingleRs.getDate("submitted_date")).thenReturn(Date.valueOf("2025-05-01"))
-      when(SubmittedReturnSingleRs.getString("ack_ref")).thenReturn("123456789012345")
-      when(SubmittedReturnSingleRs.getInt("no_of_machines_avail")).thenReturn(5)
-      when(SubmittedReturnSingleRs.getObject("net_takings_higher_rate")).thenReturn(BigDecimal.valueOf(100.10))
-      when(SubmittedReturnSingleRs.getObject("net_takings_std_rate")).thenReturn(BigDecimal.valueOf(20.00))
-      when(SubmittedReturnSingleRs.getObject("net_takings_lower_rate")).thenReturn(BigDecimal.valueOf(200.20))
-      when(SubmittedReturnSingleRs.getObject("total_due_higher_rate")).thenReturn(BigDecimal.valueOf(10.00))
-      when(SubmittedReturnSingleRs.getObject("total_due_std_rate")).thenReturn(BigDecimal.valueOf(300.30))
-      when(SubmittedReturnSingleRs.getObject("total_due_lower_rate")).thenReturn(BigDecimal.valueOf(5.00))
-      when(SubmittedReturnSingleRs.getObject("duty_payable")).thenReturn(BigDecimal.valueOf(35.00))
-      when(SubmittedReturnSingleRs.getObject("under_declared_duty")).thenReturn(BigDecimal.valueOf(40.00))
-      when(SubmittedReturnSingleRs.getObject("previous_return_amount")).thenReturn(BigDecimal.valueOf(100.00))
-      when(SubmittedReturnSingleRs.getObject("neg_amt_carry_forward")).thenReturn(BigDecimal.valueOf(99.99))
-      when(SubmittedReturnSingleRs.getObject("total_net_duty_payable")).thenReturn(BigDecimal.valueOf(75.49))
+      when(mockCsMgd.getObject(3)).thenReturn(23)
+      when(mockCsMgd.getString(4)).thenReturn("01/01/2025 - 30/03/2025")
+      when(mockCsMgd.getDate(5)).thenReturn(Date.valueOf("2025-05-01"))
+      when(mockCsMgd.getString(6)).thenReturn("123456789012345")
+      when(mockCsMgd.getObject(7)).thenReturn(5)
+      when(mockCsMgd.getBigDecimal(8)).thenReturn(java.math.BigDecimal.valueOf(100.10))
+      when(mockCsMgd.getBigDecimal(9)).thenReturn(java.math.BigDecimal.valueOf(20.00))
+      when(mockCsMgd.getBigDecimal(10)).thenReturn(java.math.BigDecimal.valueOf(200.20))
+      when(mockCsMgd.getBigDecimal(11)).thenReturn(java.math.BigDecimal.valueOf(10.00))
+      when(mockCsMgd.getBigDecimal(12)).thenReturn(java.math.BigDecimal.valueOf(300.30))
+      when(mockCsMgd.getBigDecimal(13)).thenReturn(java.math.BigDecimal.valueOf(5.00))
+      when(mockCsMgd.getBigDecimal(14)).thenReturn(java.math.BigDecimal.valueOf(35.00))
+      when(mockCsMgd.getBigDecimal(15)).thenReturn(java.math.BigDecimal.valueOf(40.00))
+      when(mockCsMgd.getBigDecimal(16)).thenReturn(java.math.BigDecimal.valueOf(100.00))
+      when(mockCsMgd.getBigDecimal(17)).thenReturn(java.math.BigDecimal.valueOf(99.99))
+      when(mockCsMgd.getBigDecimal(18)).thenReturn(java.math.BigDecimal.valueOf(75.49))
 
       val result = repository.getSubmittedReturnSingle(regNumber, 23).futureValue
 
-      result shouldBe validResponseSubmittedReturnSingle
+      result shouldBe Some(validResponseSubmittedReturnSingle)
 
       verify(mockCsMgd).setString(1, regNumber)
       verify(mockCsMgd).setInt(2, 23)
-      verify(mockCsMgd).registerOutParameter(3, oracle.jdbc.OracleTypes.CURSOR)
       verify(mockCsMgd).execute()
 
       verify(mockCsMgd).getObject(3)
+      verify(mockCsMgd).getString(4)
+      verify(mockCsMgd).getDate(5)
+      verify(mockCsMgd).getString(6)
+      verify(mockCsMgd).getObject(7)
+      verify(mockCsMgd, times(2)).getBigDecimal(8)
 
-      verify(SubmittedReturnSingleRs, times(1)).next()
-      verify(SubmittedReturnSingleRs).getInt("consec_no")
-      verify(SubmittedReturnSingleRs).getString("mgd_period")
-      verify(SubmittedReturnSingleRs).getDate("submitted_date")
-      verify(SubmittedReturnSingleRs).getString("ack_ref")
-      verify(SubmittedReturnSingleRs).getInt("no_of_machines_avail")
-      verify(SubmittedReturnSingleRs).getBigDecimal("net_takings_higher_rate")
-      verify(SubmittedReturnSingleRs).getBigDecimal("net_takings_std_rate")
-      verify(SubmittedReturnSingleRs).getBigDecimal("net_takings_lower_rate")
-      verify(SubmittedReturnSingleRs).getBigDecimal("total_due_higher_rate")
-      verify(SubmittedReturnSingleRs).getBigDecimal("total_due_std_rate")
-      verify(SubmittedReturnSingleRs).getBigDecimal("total_due_lower_rate")
-      verify(SubmittedReturnSingleRs).getBigDecimal("duty_payable")
-      verify(SubmittedReturnSingleRs).getBigDecimal("under_declared_duty")
-      verify(SubmittedReturnSingleRs).getBigDecimal("previous_return_amount")
-      verify(SubmittedReturnSingleRs).getBigDecimal("neg_amt_carry_forward")
-      verify(SubmittedReturnSingleRs).getBigDecimal("total_net_duty_payable")
-
-      verify(SubmittedReturnSingleRs).close()
       verify(mockCsMgd).close()
     }
 

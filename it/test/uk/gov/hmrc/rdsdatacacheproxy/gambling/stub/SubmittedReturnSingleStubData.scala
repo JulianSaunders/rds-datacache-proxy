@@ -22,10 +22,10 @@ import java.time.LocalDate
 
 object SubmittedReturnSingleStubData {
 
-  def getSubmittedReturnSingleData(regNumber: String, consecNo: Int): SubmittedReturnSingle =
+  def getSubmittedReturnSingleData(regNumber: String, consecNo: Int): Option[SubmittedReturnSingle] =
     regNumber match {
       case "XYZ00000000001" =>
-        SubmittedReturnSingle(
+        Some(SubmittedReturnSingle(
           consecNo                     = 23,
           mgdPeriod                    = "01/01/2025 - 30/03/2025",
           submittedDate                = LocalDate.of(2025, 5, 1),
@@ -42,10 +42,10 @@ object SubmittedReturnSingleStubData {
           previousReturnAmount         = 100.00,
           negativeAmountCarriedForward = 99.99,
           totalNetDutyPayable          = 75.49
-        )
+        ))
       case "ERR00000000000" => throw new RuntimeException("Simulated downstream failure")
       case _ =>
-        SubmittedReturnSingle(
+        Some(SubmittedReturnSingle(
           consecNo                     = 123,
           mgdPeriod                    = "01/01/2015 - 30/03/2015",
           submittedDate                = LocalDate.of(2015, 5, 1),
@@ -62,6 +62,6 @@ object SubmittedReturnSingleStubData {
           previousReturnAmount         = 1000.00,
           negativeAmountCarriedForward = 990.99,
           totalNetDutyPayable          = 750.49
-        )
+        ))
     }
 }

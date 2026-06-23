@@ -61,7 +61,7 @@ class SubmittedReturnSingleControllerISpec extends AnyWordSpec with Matchers wit
       response.status mustBe OK
       response.contentType mustBe "application/json"
 
-      response.json.as[SubmittedReturnSingle] mustBe getSubmittedReturnSingleData("XYZ00000000001", 23)
+      response.json.as[SubmittedReturnSingle] mustBe getSubmittedReturnSingleData("XYZ00000000001", 23).get
     }
 
     "return 404 when consecNo NOT provided" in {
@@ -76,14 +76,14 @@ class SubmittedReturnSingleControllerISpec extends AnyWordSpec with Matchers wit
       AuthStub.authorised()
       val response = get(s"$endpoint/xyz00000000012/23").futureValue
       response.status mustBe OK
-      response.json.as[SubmittedReturnSingle] mustBe getSubmittedReturnSingleData("XYZ00000000012", 23)
+      response.json.as[SubmittedReturnSingle] mustBe getSubmittedReturnSingleData("XYZ00000000012", 23).get
     }
 
     "trim whitespace around regNumber" in {
       AuthStub.authorised()
       val response = get(s"$endpoint/   XYZ00000000012   /23").futureValue
       response.status mustBe OK
-      response.json.as[SubmittedReturnSingle] mustBe getSubmittedReturnSingleData("XYZ00000000012", 23)
+      response.json.as[SubmittedReturnSingle] mustBe getSubmittedReturnSingleData("XYZ00000000012", 23).get
     }
 
     "return consistent results across multiple calls" in {

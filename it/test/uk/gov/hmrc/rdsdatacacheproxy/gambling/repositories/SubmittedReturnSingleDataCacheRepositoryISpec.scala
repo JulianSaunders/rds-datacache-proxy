@@ -36,7 +36,7 @@ class SubmittedReturnSingleDataCacheRepositoryISpec
     with GuiceOneAppPerSuite {
 
   class SubmittedReturnSingleRdsStub extends SubmittedReturnSingleDataSource {
-    override def getSubmittedReturnSingle(regNumber: String, consecNo: Int): Future[SubmittedReturnSingle] =
+    override def getSubmittedReturnSingle(regNumber: String, consecNo: Int): Future[Option[SubmittedReturnSingle]] =
       Future.successful(getSubmittedReturnSingleData(regNumber, consecNo))
   }
 

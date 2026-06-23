@@ -58,6 +58,9 @@ trait RepositorySupport {
     }
   }
 
+  def optString(i: Int, cs: CallableStatement): Option[String] =
+    Option(cs.getString(i)).map(_.trim).filter(_.nonEmpty)
+
   def closeQuietly(c: AutoCloseable): Unit =
     if (c != null)
       try c.close()
